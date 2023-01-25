@@ -1,0 +1,23 @@
+{
+  "app_color": "#FF18A0FB",
+  "di_row_item": "#DE000000",
+  "green_light": "#FF63C832",
+  "icon": "#FF18A0FB",
+  "status_success": "#FF63C832",
+  "status_error": "#FFE93558",
+  "status_attention": "#FFF79B26",
+  "darkSurface": "#FF19263A",
+  "surface": "#FFFFFFFF",
+  "disable": "#FFA6A6A6",
+  "on_surface": "#1FFFFFFF",
+  "dodger_blue_20": "#FF007BCF",
+  "dodger_blue_30": "#FF004F87",
+  "di_title": "#99000000",
+  "on_surface_medium_emphasis": "#80000000",
+  "on_primary_high_emphasis": "#E6FFFFFF",
+  "pi_name": "#DE000000",
+  "pi_address": "#DE000000",
+  "pi_last_visit": "#99000000",
+  "pi_card_item": "#DE000000",
+  "server_hint": "#FF9AA4A8"
+}
