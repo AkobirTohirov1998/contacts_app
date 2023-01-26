@@ -6,6 +6,7 @@ import 'package:first_app/dao/dao_provider.dart';
 import 'package:first_app/kernel/database.dart';
 import 'package:first_app/localization/error_translator.dart';
 import 'package:first_app/localization/translates.dart';
+import 'package:first_app/network/network_manager.dart';
 import 'package:first_app/pref/system_pref.dart';
 import 'package:first_app/resources/colors_dark.dart';
 import 'package:first_app/resources/colors_light.dart';
@@ -72,6 +73,12 @@ class ExampleApp extends MoldApplication {
     AssertsColors.init();
   }
 
+  @override
+  void onDestroy() {
+    NetworkManager.dispose();
+    super.onDestroy();
+  }
+
   Widget analyticScreen(String name, Widget screen) {
     Log.debug("AppMetric: $name");
 
@@ -82,11 +89,7 @@ class ExampleApp extends MoldApplication {
   @override
   Map<String, WidgetBuilder> getRoutes() => {
         ContactScreen.ROUTE_NAME: (context) =>
-            analyticScreen(ContactScreen.ROUTE_NAME, Window(ContactScreen()))
-        // SplashScreen.ROUTE_NAME: (context) =>
-        //     analyticScreen(SplashScreen.ROUTE_NAME, Window(SplashScreen())),
-        // IntroScreen.ROUTE_NAME: (context) =>
-        //     analyticScreen(IntroScreen.ROUTE_NAME, Window(IntroScreen())),
+            analyticScreen(ContactScreen.ROUTE_NAME, Window(ContactScreen())),
       };
 
   @override

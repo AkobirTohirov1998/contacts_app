@@ -15,7 +15,9 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0+1
+version: 1.0.0
+homepage:
+
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -48,6 +50,7 @@ dependencies:
   # video player plugin
   video_player: 2.2.0
   introduction_screen: 2.0.0
+  connectivity_plus: 2.3.6
 
   gwslib:
     path: ../gwslib
@@ -58,12 +61,16 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  sqflite_common_ffi:
+
+  #for test
+  mockito: 5.0.16
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: 1.0.0
+#  flutter_lints: 1.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

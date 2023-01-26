@@ -14,7 +14,7 @@ class BlocProvider<R extends Bloc, T extends View> {
     _data[type] = builder;
   }
 
-  static NetworkManager get networkManager => NetworkManagerImpl.getInstance();
+  static NetworkManager get networkManager => NetworkManager.instance();
 
   static void init() {
     register(SplashView, (view) => SplashBlocImpl(view));

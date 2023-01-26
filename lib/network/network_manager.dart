@@ -1,9 +1,34 @@
-class NetworkManagerImpl implements NetworkManager {
+import 'dart:collection';
+
+import 'package:first_app/network/network_connectivity.dart';
+
+class NetworkManager {
   // static const String LOGON_DEVICE = "b/core/s:logon_device";
 
-  static final NetworkManager _instance = NetworkManagerImpl();
+  static Map<String, NetworkManager> _instance = HashMap();
 
-  static NetworkManager getInstance() => _instance;
+  factory NetworkManager.instance({String accountId}) {
+    if (accountId != null && accountId.length != 0) {
+      if (_instance.containsKey(accountId)) {
+        return _instance[accountId];
+      } else {
+        _instance[accountId] = NetworkManager();
+        return _instance[accountId];
+      }
+    }
+    return NetworkManager();
+  }
+
+  static NetworkConnectivity _networkConnectivity;
+
+  static NetworkConnectivity networkConnectivity() {
+    if (_networkConnectivity == null) {
+      _networkConnectivity = NetworkConnectivity();
+    }
+    return _networkConnectivity;
+  }
+
+  NetworkManager();
 
 /*  @override
   Future<dynamic> auth(String serverId, String login, String password, String serverUrl) async {
@@ -150,30 +175,8 @@ class NetworkManagerImpl implements NetworkManager {
       rethrow;
     }
   }*/
-}
 
-abstract class NetworkManager {
-/*  Future<dynamic> auth(String serverId, String login, String password, String serverUrl);
-
-  Future<dynamic> editPassword(
-      Server server, String oldPassword, String newPassword, String rewrittenPassword);
-
-  Future<dynamic> userInfos(Server server, String langCode);
-
-  Future<dynamic> changePassword(String serverUrl, String password, String token, int code);
-
-  Future<dynamic> checkRecoverPasswordMessage(
-    String serverUrl,
-    String token,
-    String langCode,
-    int code,
-  );
-
-  Future<dynamic> sendRecoverPasswordMessage(String serverUrl, String login, String langCode);
-
-  Future<dynamic> loadUserActiveSessions(Server server);
-
-  Future<dynamic> deleteUserActiveSession(Server server, Filial filial, String hostId);
-
-  Future<void> saveAccountCode(Server server, String accountCode);*/
+  static void dispose() {
+    _networkConnectivity?.dispose();
+  }
 }

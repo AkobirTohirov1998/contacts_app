@@ -1,4 +1,6 @@
+import 'package:first_app/bloc/bloc.dart';
 import 'package:first_app/bloc/kernel/bloc.dart';
+import 'package:first_app/dao/contact/contact_dao.dart';
 import 'package:first_app/dao/dao.dart';
 import 'package:first_app/kernel/database.dart';
 import 'package:first_app/network/network_manager.dart';
@@ -14,20 +16,12 @@ class DaoProvider<R extends Dao, T extends MyBloc> {
     _data[type] = builder;
   }
 
-  static NetworkManager get networkManager => NetworkManagerImpl.getInstance();
+  static NetworkManager get networkManager => NetworkManager.instance();
 
-  static Database _getDatabase() {
-    final db = AppExampleDatabase.getInstance();
-    return db.getDatabase();
-  }
+  static Database _getDatabase() => AppExampleDatabase.getInstance().getDatabase();
 
   static void init() {
-    // register(IntroBloc, (bloc) => IntroDaoImpl(_getDatabase()));
-    // register(LoginAccountBloc, (bloc) => LoginService(_getDatabase(), networkManager));
-    // register(FilialListBloc, (bloc) => FilialListDaoImpl(_getDatabase()));
-    // register(AccountListBloc, (bloc) => AccountListDaoImpl(_getDatabase()));
-    // register(SelectAccountListBloc, (bloc) => SelectAccountListDaoImpl(_getDatabase()));
-    // register(EditPasswordBloc, (bloc) => EditPasswordDaoImpl(_getDatabase()));
+    register(ContactBloc, (bloc) => ContactDaoImpl(_getDatabase()));
   }
 
   static DaoProvider of(MyBloc bloc) {

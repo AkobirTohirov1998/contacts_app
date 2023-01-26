@@ -12,7 +12,7 @@ class MdUsers {
 	// ignore: non_constant_identifier_names
 	static const String C_NAME = "name";
 	// ignore: non_constant_identifier_names
-	static const String C_GENDER = "gender";
+	static const String C_PHONE_NUMBER = "phone_number";
 	// ignore: non_constant_identifier_names
 	static const String C_PHOTO_SHA = "photo_sha";
 
@@ -23,7 +23,7 @@ class MdUsers {
 	create table md_users(
 	  user_id           int not null,
 	  name              text not null,
-	  gender            text,
+	  phone_number      text not null,
 	  photo_sha         text,
 	  constraint md_users_pk primary key (user_id),
 	);
@@ -31,9 +31,10 @@ class MdUsers {
 
 	//------------------------------------------------------------------------------------------------
 
-	static void checkRequired(int userId, String name) {
+	static void checkRequired(int userId, String name, String phoneNumber) {
 		ArgumentError.checkNotNull(userId, C_USER_ID);
 		ArgumentError.checkNotNull(name, C_NAME);
+		ArgumentError.checkNotNull(phoneNumber, C_PHONE_NUMBER);
 	}
 
 	static void checkPrimaryKeys(int userId) {
@@ -44,10 +45,10 @@ class MdUsers {
 
 	final int userId;
 	final String name;
-	final String gender;
+	final String phoneNumber;
 	final String photoSha;
 
-	MdUsers({@required this.userId, @required this.name, this.gender, this.photoSha}) {
+	MdUsers({@required this.userId, @required this.name, @required this.phoneNumber, this.photoSha}) {
 		checkPrimaryKeys(userId);
 	}
 
@@ -56,7 +57,7 @@ class MdUsers {
 		return MdUsers(
 			userId: data[C_USER_ID],
 			name: data[C_NAME],
-			gender: data[C_GENDER],
+			phoneNumber: data[C_PHONE_NUMBER],
 			photoSha: data[C_PHOTO_SHA],
 		);
 	}
@@ -65,14 +66,14 @@ class MdUsers {
 		return {
 			C_USER_ID: this.userId,
 			C_NAME: this.name,
-			C_GENDER: this.gender,
+			C_PHONE_NUMBER: this.phoneNumber,
 			C_PHOTO_SHA: this.photoSha,
 		};
 	}
 
 	@override
 	String toString() {
-		 return "MdUsers($C_USER_ID:$userId, $C_NAME:$name, $C_GENDER:$gender, $C_PHOTO_SHA:$photoSha)";
+		 return "MdUsers($C_USER_ID:$userId, $C_NAME:$name, $C_PHONE_NUMBER:$phoneNumber, $C_PHOTO_SHA:$photoSha)";
 	}
 }
 
@@ -81,9 +82,9 @@ class MdUsers {
 class Z_MdUsers {
 
 	// init
-	static MdUsers init({@required int userId, @required String name, String gender, String photoSha}) {
+	static MdUsers init({@required int userId, @required String name, @required String phoneNumber, String photoSha}) {
 		MdUsers.checkPrimaryKeys(userId);
-		return new MdUsers(userId: userId, name: name, gender: gender, photoSha: photoSha);
+		return new MdUsers(userId: userId, name: name, phoneNumber: phoneNumber, photoSha: photoSha);
 	}
 
 	// load all rows in database
@@ -144,9 +145,9 @@ class Z_MdUsers {
 	}
 
 	// update by one
-	static Future<int> updateOne(dynamic db, {@required int userId, String name, String gender, String photoSha, bool removeNull = false}) {
+	static Future<int> updateOne(dynamic db, {@required int userId, String name, String phoneNumber, String photoSha, bool removeNull = false}) {
 		MdUsers.checkPrimaryKeys(userId);
-		return updateRow(db, toRowFromList(values: [userId, name, gender, photoSha]), removeNull: removeNull);
+		return updateRow(db, toRowFromList(values: [userId, name, phoneNumber, photoSha]), removeNull: removeNull);
 	}
 
 	// save row
@@ -169,9 +170,9 @@ class Z_MdUsers {
 	}
 
 	// save one
-	static Future<int> saveOne(dynamic db, {@required int userId, @required String name, String gender, String photoSha, bool removeNull = false}) {
+	static Future<int> saveOne(dynamic db, {@required int userId, @required String name, @required String phoneNumber, String photoSha, bool removeNull = false}) {
 		MdUsers.checkPrimaryKeys(userId);
-		return saveRow(db, toRowFromList(values: [userId, name, gender, photoSha]), removeNull: removeNull);
+		return saveRow(db, toRowFromList(values: [userId, name, phoneNumber, photoSha]), removeNull: removeNull);
 	}
 
 	// delete all rows in database
@@ -205,7 +206,7 @@ class Z_MdUsers {
 
 	// insert row try insert if exists abort
 	static Future<int> insertRowTry(dynamic db, MdUsers row) {
-		MdUsers.checkRequired(row.userId, row.name);
+		MdUsers.checkRequired(row.userId, row.name, row.phoneNumber);
 		if (db is Batch) {
 			db.insert(MdUsers.TABLE_NAME, row.toData(), conflictAlgorithm: ConflictAlgorithm.abort);
 			return Future.value(-1);
@@ -218,14 +219,14 @@ class Z_MdUsers {
 		}
 	}
 
-	static Future<int> insertOneTry(dynamic db, {@required int userId, @required String name, String gender, String photoSha}) {
-		MdUsers.checkRequired(userId, name);
-		return insertRowTry(db, toRowFromList(values: [userId, name, gender, photoSha]));
+	static Future<int> insertOneTry(dynamic db, {@required int userId, @required String name, @required String phoneNumber, String photoSha}) {
+		MdUsers.checkRequired(userId, name, phoneNumber);
+		return insertRowTry(db, toRowFromList(values: [userId, name, phoneNumber, photoSha]));
 	}
 
 	// insert row if exists fail
 	static Future<int> insertRow(dynamic db, MdUsers row) {
-		MdUsers.checkRequired(row.userId, row.name);
+		MdUsers.checkRequired(row.userId, row.name, row.phoneNumber);
 		if (db is Batch) {
 			db.insert(MdUsers.TABLE_NAME, row.toData(), conflictAlgorithm: ConflictAlgorithm.fail);
 			return Future.value(-1);
@@ -238,60 +239,60 @@ class Z_MdUsers {
 		}
 	}
 
-	static Future<int> insertOne(dynamic db, {@required int userId, @required String name, String gender, String photoSha}) {
-		MdUsers.checkRequired(userId, name);
-		return insertRow(db, toRowFromList(values: [userId, name, gender, photoSha]));
+	static Future<int> insertOne(dynamic db, {@required int userId, @required String name, @required String phoneNumber, String photoSha}) {
+		MdUsers.checkRequired(userId, name, phoneNumber);
+		return insertRow(db, toRowFromList(values: [userId, name, phoneNumber, photoSha]));
 	}
 
 	// to map
-	static Map<String, dynamic> toMap({MdUsers row, String f1, String f2, String f3, String f4, int userId, String name, String gender, String photoSha}) {
+	static Map<String, dynamic> toMap({MdUsers row, String f1, String f2, String f3, String f4, int userId, String name, String phoneNumber, String photoSha}) {
 		userId = nvl(row?.userId, userId);
 		name = nvl(row?.name, name);
-		gender = nvl(row?.gender, gender);
+		phoneNumber = nvl(row?.phoneNumber, phoneNumber);
 		photoSha = nvl(row?.photoSha, photoSha);
-		MdUsers.checkRequired(userId, name);
-		return {nvlString(f1, MdUsers.C_USER_ID): userId, nvlString(f2, MdUsers.C_NAME): name, nvlString(f3, MdUsers.C_GENDER): gender, nvlString(f4, MdUsers.C_PHOTO_SHA): photoSha};
+		MdUsers.checkRequired(userId, name, phoneNumber);
+		return {nvlString(f1, MdUsers.C_USER_ID): userId, nvlString(f2, MdUsers.C_NAME): name, nvlString(f3, MdUsers.C_PHONE_NUMBER): phoneNumber, nvlString(f4, MdUsers.C_PHOTO_SHA): photoSha};
 	}
 
 	// to list
-	static List<dynamic> toList({MdUsers row, int userId, String name, String gender, String photoSha}) {
+	static List<dynamic> toList({MdUsers row, int userId, String name, String phoneNumber, String photoSha}) {
 		userId = nvl(row?.userId, userId);
 		name = nvl(row?.name, name);
-		gender = nvl(row?.gender, gender);
+		phoneNumber = nvl(row?.phoneNumber, phoneNumber);
 		photoSha = nvl(row?.photoSha, photoSha);
-		MdUsers.checkRequired(userId, name);
-		return [userId, name, gender, photoSha];
+		MdUsers.checkRequired(userId, name, phoneNumber);
+		return [userId, name, phoneNumber, photoSha];
 	}
 
 	// to row from map
-	static MdUsers toRowFromMap({Map<String, dynamic> data, String f1, String f2, String f3, String f4, int userId, String name, String gender, String photoSha}) {
+	static MdUsers toRowFromMap({Map<String, dynamic> data, String f1, String f2, String f3, String f4, int userId, String name, String phoneNumber, String photoSha}) {
 		userId = nvl(data == null ? null : data[nvl(f1, MdUsers.C_USER_ID)], userId);
 		name = nvl(data == null ? null : data[nvl(f2, MdUsers.C_NAME)], name);
-		gender = nvl(data == null ? null : data[nvl(f3, MdUsers.C_GENDER)], gender);
+		phoneNumber = nvl(data == null ? null : data[nvl(f3, MdUsers.C_PHONE_NUMBER)], phoneNumber);
 		photoSha = nvl(data == null ? null : data[nvl(f4, MdUsers.C_PHOTO_SHA)], photoSha);
 		MdUsers.checkPrimaryKeys(userId);
-		return new MdUsers(userId: userId, name: name, gender: gender, photoSha: photoSha);
+		return new MdUsers(userId: userId, name: name, phoneNumber: phoneNumber, photoSha: photoSha);
 	}
 
 	// to row from list
 	static MdUsers toRowFromList({@required List<dynamic> values, List<String> keys, String f1, String f2, String f3, String f4}) {
 		final userId = values[keys?.indexOf(nvl(f1, MdUsers.C_USER_ID)) ?? 0];
 		final name = values[keys?.indexOf(nvl(f2, MdUsers.C_NAME)) ?? 1];
-		final gender = values[keys?.indexOf(nvl(f3, MdUsers.C_GENDER)) ?? 2];
+		final phoneNumber = values[keys?.indexOf(nvl(f3, MdUsers.C_PHONE_NUMBER)) ?? 2];
 		final photoSha = values[keys?.indexOf(nvl(f4, MdUsers.C_PHOTO_SHA)) ?? 3];
 		MdUsers.checkPrimaryKeys(userId);
-		return new MdUsers(userId: userId, name: name, gender: gender, photoSha: photoSha);
+		return new MdUsers(userId: userId, name: name, phoneNumber: phoneNumber, photoSha: photoSha);
 	}
 
 	// to row from list strings
 	static MdUsers toRowFromListString({@required List<String> values, List<String> keys, String f1, String f2, String f3, String f4}) {
 		dynamic userId = values[keys?.indexOf(nvl(f1, MdUsers.C_USER_ID)) ?? 0];
 		dynamic name = values[keys?.indexOf(nvl(f2, MdUsers.C_NAME)) ?? 1];
-		dynamic gender = values[keys?.indexOf(nvl(f3, MdUsers.C_GENDER)) ?? 2];
+		dynamic phoneNumber = values[keys?.indexOf(nvl(f3, MdUsers.C_PHONE_NUMBER)) ?? 2];
 		dynamic photoSha = values[keys?.indexOf(nvl(f4, MdUsers.C_PHOTO_SHA)) ?? 3];
 		userId = userId is String && userId.isNotEmpty ? num.parse(userId) : null;
 		MdUsers.checkPrimaryKeys(userId);
-		return new MdUsers(userId: userId, name: name, gender: gender, photoSha: photoSha);
+		return new MdUsers(userId: userId, name: name, phoneNumber: phoneNumber, photoSha: photoSha);
 	}
 
 	static R nvl<R>(R a, R b) {

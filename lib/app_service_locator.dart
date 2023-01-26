@@ -1,5 +1,4 @@
-import 'package:first_app/dao/login/login_service.dart';
-import 'package:first_app/network/network_manager.dart';
+import 'package:first_app/dao/contact/contact_dao.dart';
 import 'package:sqflite/sqflite.dart';
 
 class AppServiceLocator {
@@ -7,12 +6,12 @@ class AppServiceLocator {
 
   AppServiceLocator(this.database);
 
-  LoginService _loginService;
+  ContactDaoImpl _contactDao;
 
-  LoginService get loginService {
-    if (_loginService == null || _loginService?.db?.isOpen != true) {
-      _loginService = LoginService(database.call(), NetworkManagerImpl.getInstance());
+  ContactDaoImpl get developerDao {
+    if (_contactDao == null || _contactDao.db.isOpen != true) {
+      _contactDao = ContactDaoImpl(database.call());
     }
-    return _loginService;
+    return _contactDao;
   }
 }
